@@ -1,0 +1,9 @@
+c:\users\acer\documents\visual studio 2012\Projects\KG1\KG1\bin\Debug\KG1.exe.config
+c:\users\acer\documents\visual studio 2012\Projects\KG1\KG1\obj\Debug\KG1.Form1.resources
+c:\users\acer\documents\visual studio 2012\Projects\KG1\KG1\obj\Debug\KG1.Properties.Resources.resources
+c:\users\acer\documents\visual studio 2012\Projects\KG1\KG1\obj\Debug\KG1.csproj.GenerateResource.Cache
+c:\users\acer\documents\visual studio 2012\Projects\KG1\KG1\bin\Debug\KG1.exe
+c:\users\acer\documents\visual studio 2012\Projects\KG1\KG1\bin\Debug\KG1.pdb
+c:\users\acer\documents\visual studio 2012\Projects\KG1\KG1\obj\Debug\KG1.exe
+c:\users\acer\documents\visual studio 2012\Projects\KG1\KG1\obj\Debug\KG1.pdb
+c:\users\acer\documents\visual studio 2012\Projects\KG1\KG1\obj\Debug\KG1.csprojResolveAssemblyReference.cache
