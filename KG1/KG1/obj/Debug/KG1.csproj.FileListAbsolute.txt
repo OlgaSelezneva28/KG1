@@ -6,4 +6,4 @@ c:\users\acer\documents\visual studio 2012\Projects\KG1\KG1\bin\Debug\KG1.exe
 c:\users\acer\documents\visual studio 2012\Projects\KG1\KG1\bin\Debug\KG1.pdb
 c:\users\acer\documents\visual studio 2012\Projects\KG1\KG1\obj\Debug\KG1.exe
 c:\users\acer\documents\visual studio 2012\Projects\KG1\KG1\obj\Debug\KG1.pdb
-c:\users\acer\documents\visual studio 2012\Projects\KG1\KG1\obj\Debug\KG1.csprojResolveAssemblyReference.cache
+C:\Users\ACER\Documents\Visual Studio 2012\Projects\KG1\KG1\obj\Debug\KG1.csprojResolveAssemblyReference.cache

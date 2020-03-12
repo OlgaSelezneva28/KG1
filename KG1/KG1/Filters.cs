@@ -11,26 +11,10 @@ namespace KG1
 {
     abstract class Filters
     {
+
         protected abstract Color calculateNewPixelColor(Bitmap Source, int W, int H);
 
-        public Bitmap processImage(Bitmap sourceImage, BackgroundWorker worked )
-        {
-            Bitmap resultImage = new Bitmap(sourceImage.Width, sourceImage.Height);
-
-            for (int i = 0; i < sourceImage.Width; i++)
-            {
-                worked.ReportProgress((int)((float)i / resultImage.Width * 100));
-                if (worked.CancellationPending)
-                {
-                    return null;
-                }
-                for (int j = 0; j < sourceImage.Height; j++)
-                {
-                    resultImage.SetPixel(i, j, calculateNewPixelColor(sourceImage, i, j));
-                }
-            }
-            return resultImage;
-        }
+        public abstract Bitmap processImage(Bitmap sourceImage, BackgroundWorker worked);
 
         public int Clamp(int value, int min, int max)
         {
@@ -53,6 +37,25 @@ namespace KG1
             Color result = Color.FromArgb(255 - sourceColor.R, 255 - sourceColor.G, 255 - sourceColor.B);
 
             return result;
+        }
+
+        public override Bitmap processImage(Bitmap sourceImage, BackgroundWorker worked)
+        {
+            Bitmap resultImage = new Bitmap(sourceImage.Width, sourceImage.Height);
+
+            for (int i = 0; i < sourceImage.Width; i++)
+            {
+                worked.ReportProgress((int)((float)i / resultImage.Width * 100));
+                if (worked.CancellationPending)
+                {
+                    return null;
+                }
+                for (int j = 0; j < sourceImage.Height; j++)
+                {
+                    resultImage.SetPixel(i, j, calculateNewPixelColor(sourceImage, i, j));
+                }
+            }
+            return resultImage;
         }
     };
 
@@ -95,6 +98,26 @@ namespace KG1
 
             return Color.FromArgb(Clamp((int)resR, 0, 255), Clamp((int)resG, 0, 255), Clamp((int)resB, 0, 255));
         }
+
+        public override Bitmap processImage(Bitmap sourceImage, BackgroundWorker worked)
+        {
+            Bitmap resultImage = new Bitmap(sourceImage.Width, sourceImage.Height);
+
+            for (int i = 0; i < sourceImage.Width; i++)
+            {
+                worked.ReportProgress((int)((float)i / resultImage.Width * 100));
+                if (worked.CancellationPending)
+                {
+                    return null;
+                }
+                for (int j = 0; j < sourceImage.Height; j++)
+                {
+                    resultImage.SetPixel(i, j, calculateNewPixelColor(sourceImage, i, j));
+                }
+            }
+            return resultImage;
+        }
+
     };
 
     //Размытие 
@@ -163,7 +186,25 @@ namespace KG1
 
             return result;
         }
- 
+
+        public override Bitmap processImage(Bitmap sourceImage, BackgroundWorker worked)
+        {
+            Bitmap resultImage = new Bitmap(sourceImage.Width, sourceImage.Height);
+
+            for (int i = 0; i < sourceImage.Width; i++)
+            {
+                worked.ReportProgress((int)((float)i / resultImage.Width * 100));
+                if (worked.CancellationPending)
+                {
+                    return null;
+                }
+                for (int j = 0; j < sourceImage.Height; j++)
+                {
+                    resultImage.SetPixel(i, j, calculateNewPixelColor(sourceImage, i, j));
+                }
+            }
+            return resultImage;
+        }
     };
 
     /*-----------------------------------------------------------------------------------------------*/
@@ -186,7 +227,25 @@ namespace KG1
 
             return result;
         }
- 
+
+        public override Bitmap processImage(Bitmap sourceImage, BackgroundWorker worked)
+        {
+            Bitmap resultImage = new Bitmap(sourceImage.Width, sourceImage.Height);
+
+            for (int i = 0; i < sourceImage.Width; i++)
+            {
+                worked.ReportProgress((int)((float)i / resultImage.Width * 100));
+                if (worked.CancellationPending)
+                {
+                    return null;
+                }
+                for (int j = 0; j < sourceImage.Height; j++)
+                {
+                    resultImage.SetPixel(i, j, calculateNewPixelColor(sourceImage, i, j));
+                }
+            }
+            return resultImage;
+        }
     };
 
     /*-----------------------------------------------------------------------------------------------*/
@@ -201,6 +260,25 @@ namespace KG1
             Color result = Color.FromArgb(Clamp(sourceColor.R + 20, 0, 255), Clamp(sourceColor.G + 20, 0, 255), Clamp(sourceColor.B + 20, 0, 255));
 
             return result;
+        }
+
+        public override Bitmap processImage(Bitmap sourceImage, BackgroundWorker worked)
+        {
+            Bitmap resultImage = new Bitmap(sourceImage.Width, sourceImage.Height);
+
+            for (int i = 0; i < sourceImage.Width; i++)
+            {
+                worked.ReportProgress((int)((float)i / resultImage.Width * 100));
+                if (worked.CancellationPending)
+                {
+                    return null;
+                }
+                for (int j = 0; j < sourceImage.Height; j++)
+                {
+                    resultImage.SetPixel(i, j, calculateNewPixelColor(sourceImage, i, j));
+                }
+            }
+            return resultImage;
         }
     };
 
@@ -256,6 +334,311 @@ namespace KG1
 
     };
 
-}
+    /*-----------------------------------------------------------------------------------------------*/
+    /* Серый мир  */
+
+    class GrayWorld: Filters
+    {
+        public int Avg;
+        public int R, G, B;
+
+        protected override Color calculateNewPixelColor(Bitmap Source, int W, int H)
+        {
+            Color sourceColor = Source.GetPixel(W, H);
+
+            Color result = Color.FromArgb(Clamp(sourceColor.R * Avg / R, 0, 255), Clamp(sourceColor.G * Avg / G, 0, 255), Clamp(sourceColor.B * Avg / B, 0, 255));
+            return result;
+        }
+
+        public override Bitmap processImage(Bitmap sourceImage, BackgroundWorker worked)
+        {
+            Bitmap resultImage = new Bitmap(sourceImage.Width, sourceImage.Height);
+            R = 0; G = 0; B = 0; Avg = 0;
+            for (int i = 0; i < sourceImage.Width; i++)
+            {
+                for (int j = 0; j < sourceImage.Height; j++)
+                {
+                    Color sourceColor = sourceImage.GetPixel(i, j);
+                    R += sourceColor.R;
+                    G += sourceColor.G;
+                    B += sourceColor.B;
+                }
+            }
+            int size = sourceImage.Width * sourceImage.Height;
+            R = R / size;
+            G = G / size;
+            B = B / size;
+            Avg = (R + G + B) / 3;
+
+            for (int i = 0; i < sourceImage.Width; i++)
+            {
+                worked.ReportProgress((int)((float)i / sourceImage.Width * 100));
+                if (worked.CancellationPending)
+                    return null;
+                for (int j = 0; j < sourceImage.Height; j++)
+                    resultImage.SetPixel(i, j, calculateNewPixelColor(sourceImage, i, j));
+            }
+            return resultImage;
+        }
+    };
+
+    /*-----------------------------------------------------------------------------------------------*/
+    /* Идеальный отражатель */
+
+    class PerfectReflector:Filters
+    {
+        public int F(int x, int xmax)
+        {
+            return Clamp((x*255/xmax),0,255);
+        }
+
+        protected override Color calculateNewPixelColor(Bitmap Source, int W, int H)
+        {
+            return Source.GetPixel(W, H);
+        }
+
+        public override Bitmap processImage(Bitmap sourceImage, BackgroundWorker worked)
+        {
+            Bitmap resultImage = new Bitmap(sourceImage.Width, sourceImage.Height);
+            int maxR = 0; int maxG = 0; int maxB = 0;
+            for (int i = 0; i < sourceImage.Width; i++)
+            {
+                for (int j = 0; j < sourceImage.Height; j++)
+                {
+                    Color sourceColor = sourceImage.GetPixel(i, j);
+                    if (sourceColor.R > maxR)
+                        maxR = sourceColor.R;
+                    if (sourceColor.G > maxG)
+                        maxG = sourceColor.G;
+                    if (sourceColor.B > maxB)
+                        maxB = sourceColor.B;
+                }
+            }
+
+            for (int i = 0; i < sourceImage.Width; i++)
+            {
+                worked.ReportProgress((int)((float)i / sourceImage.Width * 100));
+                if (worked.CancellationPending)
+                {
+                    return null;
+                }
+                for (int j = 0; j < sourceImage.Height; j++)
+                {
+                    int R = sourceImage.GetPixel(i, j).R;
+                    int G = sourceImage.GetPixel(i, j).G;
+                    int B = sourceImage.GetPixel(i, j).B;
+
+                    resultImage.SetPixel(i, j, Color.FromArgb(F(R, maxR), F(G, maxG), F(B, maxB)));
+                }
+            }
+            return resultImage;
+        }
+    };
+
+    /*-----------------------------------------------------------------------------------------------*/
+    /* Коррекция с опорным цветом */
+
+    class CorrectionWithAReferenceColor :Filters
+    {
+        Color main;
+
+        public CorrectionWithAReferenceColor(Color m)
+        {
+             main = new Color();
+             main = m;
+        }
+
+        public int F(int x,int dst, int src)
+        {
+            return Clamp((int)(x * dst / src ), 0, 255);
+        }
+
+        protected override Color calculateNewPixelColor(Bitmap Source, int W, int H)
+        {
+            return Source.GetPixel(W, H);
+        }
+
+        public override Bitmap processImage(Bitmap sourceImage, BackgroundWorker worked)
+        {
+            Bitmap resultImage = new Bitmap(sourceImage.Width, sourceImage.Height);
+            int Rsrc = 0; int Gsrc = 0; int Bsrc = 0;
+            int Rdst = main.R; int Gdst = main.G; int Bdst = main.B;
+
+            for (int i = 0; i < sourceImage.Width; i++)
+            {
+                for (int j = 0; j < sourceImage.Height; j++)
+                {
+                    Color sourceColor = sourceImage.GetPixel(i, j);
+                    if (sourceColor.R > Rsrc)
+                        Rsrc = sourceColor.R;
+                    if (sourceColor.G > Gsrc)
+                        Gsrc = sourceColor.G;
+                    if (sourceColor.B > Bsrc)
+                        Bsrc = sourceColor.B;
+                }
+            }
+
+            for (int i = 0; i < sourceImage.Width; i++)
+            {
+                worked.ReportProgress((int)((float)i / sourceImage.Width * 100));
+                if (worked.CancellationPending)
+                {
+                    return null;
+                }
+                for (int j = 0; j < sourceImage.Height; j++)
+                {
+                    int R = sourceImage.GetPixel(i, j).R;
+                    int G = sourceImage.GetPixel(i, j).G;
+                    int B = sourceImage.GetPixel(i, j).B;
+
+                    resultImage.SetPixel(i, j, Color.FromArgb(F(R, Rdst,Rsrc), F(G, Gdst, Gsrc), F(B, Bdst, Bsrc)));
+                }
+            }
+            return resultImage;
+        }
+    };
+
+    /*-----------------------------------------------------------------------------------------------*/
+    /* Линейное растяжение гистограммы  */
+    class StretchingTheHistogram : Filters 
+    {
+        public int F(int y, int ymax, int ymin)
+        {
+            return Clamp(((255 * (y - ymin)) / (ymax - ymin)), 0, 255);
+        }
+        protected override Color calculateNewPixelColor(Bitmap Source, int W, int H)
+        {
+            return Source.GetPixel(W, H);
+        }
+        public override Bitmap processImage(Bitmap sourceImage, BackgroundWorker worked)
+        {
+            Bitmap result = new Bitmap(sourceImage.Width, sourceImage.Height);
+            int minR = 0;
+            int maxR = 0;
+            int minG = 0;
+            int maxG = 0;
+            int minB = 0;
+            int maxB = 0;
+            for (int i = 0; i < sourceImage.Width; i++)
+            {
+                for (int j = 0; j < sourceImage.Height; j++)
+                {
+                    Color pixColor = sourceImage.GetPixel(i, j);
+                    if (minR > pixColor.R)
+                        minR = pixColor.R;
+                    if (maxR < pixColor.R)
+                        maxR = pixColor.R;
+                    if (minG > pixColor.G)
+                        minG = pixColor.G;
+                    if (maxG < pixColor.G)
+                        maxG = pixColor.G;
+                    if (minB > pixColor.B)
+                        minB = pixColor.B;
+                    if (maxB < pixColor.B)
+                        maxB = pixColor.B;
+                }
+            }
+
+            for (int i = 0; i < sourceImage.Width; i++)
+            {
+                worked.ReportProgress((int)((float)i / sourceImage.Width * 100));
+                if (worked.CancellationPending)
+                {
+                    return null;
+                }
+                for (int j = 0; j < sourceImage.Height; j++)
+                {
+                    int R = sourceImage.GetPixel(i, j).R;
+                    int G = sourceImage.GetPixel(i, j).G;
+                    int B = sourceImage.GetPixel(i, j).B;
+                    result.SetPixel(i, j, Color.FromArgb(F(R, maxR, minR), F(G, maxG, minG), F(B, maxB, minB)));
+                }
+            }
+            return result;
+        }
+    };
+
+    /*-----------------------------------------------------------------------------------------------*/
+    /* Стекло  */
+
+    class glass: Filters 
+    {
+        protected override Color calculateNewPixelColor(Bitmap Source, int W, int H)
+        {
+            Random R = new Random();
+            int X = Clamp((int)(W + R.NextDouble()* 10.0 - 5 ), 0, Source.Width - 1);
+            int Y = Clamp((int)(H + R.NextDouble()* 10.0 - 5 ), 0, Source.Height - 1);
+            Color result = Source.GetPixel(X, Y);
+            return result;
+        }
+
+        public override Bitmap processImage(Bitmap sourceImage, BackgroundWorker worked)
+        {
+            Bitmap resultImage = new Bitmap(sourceImage.Width, sourceImage.Height);
+
+            for (int i = 0; i < sourceImage.Width; i++)
+            {
+                worked.ReportProgress((int)((float)i / resultImage.Width * 100));
+                if (worked.CancellationPending)
+                {
+                    return null;
+                }
+                for (int j = 0; j < sourceImage.Height; j++)
+                {
+                    resultImage.SetPixel(i, j, calculateNewPixelColor(sourceImage, i, j));
+                }
+            }
+            return resultImage;
+        }
+    };
+
+    /*-----------------------------------------------------------------------------------------------*/
+    /* Motion blur  */
+
+    class MotionBlur : matrixFilters
+    {
+        public MotionBlur()
+        {
+            int sizeX = 3;
+            int sizeY = 3;
+            kernel = new float[sizeX,sizeY];
+            for (int i = 0; i < sizeX; i++)
+            {
+                for (int j = 0; j < sizeY; j++)
+                {
+                    kernel[i, j] = 0;
+                    if (i == j)
+                    {
+                        kernel[i, j] = 1.0f / (float)(sizeX);
+                    }
+                }
+            }
+        }
+    };
+
+    /*-----------------------------------------------------------------------------------------------*/
+    /* Резкость  */
+
+    class sharpness : matrixFilters
+    {
+        public sharpness()
+        {
+            int X = 3;
+            int Y = 3;
+            kernel = new float[X,Y];
+            kernel[0,0] = -1;
+            kernel[1,0] = -1;
+            kernel[2,0] = -1;
+            kernel[0,1] = -1;
+            kernel[1,1] = 9;
+            kernel[2, 1] = -1;
+            kernel[0, 2] = -1;
+            kernel[1, 2] = -1;
+            kernel[2, 2] = -1;
+        }
+    };
+};
+     
+
 
 

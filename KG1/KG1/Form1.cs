@@ -152,7 +152,8 @@ namespace KG1
 
                 fs.Close();
             }
-            this.сохранитьToolStripMenuItem.Click += new System.EventHandler(this.сохранитьToolStripMenuItem_Click);
+
+            this.pictureBox1.Click += new System.EventHandler(this.сохранитьToolStripMenuItem_Click);
         }
 
         private void файлToolStripMenuItem_Click(object sender, EventArgs e)
@@ -176,6 +177,60 @@ namespace KG1
         {
             Filters f7 = new Sharpness();
             backgroundWorker1.RunWorkerAsync(f7);
+        }
+
+        private void серыйМирToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Filters f8 = new GrayWorld();
+            backgroundWorker1.RunWorkerAsync(f8);
+        }
+
+        private void коррекцияЦветаToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Filters f9 = new StretchingTheHistogram();
+
+            backgroundWorker1.RunWorkerAsync(f9);
+        }
+
+        private void ИдеальныйОтражательToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Filters f10 = new PerfectReflector();
+
+            backgroundWorker1.RunWorkerAsync(f10);
+        }
+
+        private void КоррекцияСОпорнымЦветомToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form1 win = new Form1();
+            Color main;
+            main = new Color();
+            if (win.colorDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                main = win.colorDialog1.Color;
+
+            Filters f11 = new CorrectionWithAReferenceColor(main);
+
+            backgroundWorker1.RunWorkerAsync(f11);
+        }
+
+        private void эффектСтеклоToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Filters f12 = new glass();
+
+            backgroundWorker1.RunWorkerAsync(f12);
+        }
+
+        private void motionBlurToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Filters f13 = new MotionBlur();
+
+            backgroundWorker1.RunWorkerAsync(f13);
+        }
+
+        private void резкостьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Filters f14 = new sharpness();
+
+            backgroundWorker1.RunWorkerAsync(f14);
         }
     }
 }
